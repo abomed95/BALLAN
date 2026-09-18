@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "langue": "ar",
+    "statut": "a_relire",
+    "revu_par": null,
+    "note": "Relecture par un locuteur natif prevue au lot 7. Chiffres occidentaux imposes (BALLAN.md §7)."
+  },
+  "date": {
+    "jours": [
+      "الاثنين",
+      "الثلاثاء",
+      "الأربعاء",
+      "الخميس",
+      "الجمعة",
+      "السبت",
+      "الأحد"
+    ],
+    "mois": [
+      "يناير",
+      "فبراير",
+      "مارس",
+      "أبريل",
+      "مايو",
+      "يونيو",
+      "يوليو",
+      "أغسطس",
+      "سبتمبر",
+      "أكتوبر",
+      "نوفمبر",
+      "ديسمبر"
+    ],
+    "format_date": "{jour} {numero} {mois}",
+    "format_date_courte": "{numero} {mois}",
+    "format_heure": "{heures}:{minutes}",
+    "format_datetime": "{date} الساعة {heure}",
+    "format_plage_horaire": "{debut} – {fin}"
+  },
+  "acces": {
+    "refuse": "لا يمكنني الرد على هذا الطلب من هذا الرقم. سأحوّله إلى إدارة المدرسة وسيتم الاتصال بكم."
+  },
+  "escalade": {
+    "transmis": "تم تحويل طلبكم إلى إدارة المدرسة. سيرد عليكم أحد الموظفين."
+  }
+}
