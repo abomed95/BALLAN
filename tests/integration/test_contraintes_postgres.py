@@ -1,4 +1,4 @@
-"""Verification des garde-fous qui vivent dans la base, pas dans le code.
+"""Garde-fous du noyau qui vivent dans la base, pas dans le code.
 
 ``core/scheduling/conflits.py`` est le miroir applicatif de la contrainte
 d'exclusion : il permet d'echouer poliment et de proposer autre chose. Mais
@@ -16,30 +16,27 @@ jamais pointer vers autre chose qu'une base jetable.
 
 from __future__ import annotations
 
-import os
-import shutil
 import subprocess
-from pathlib import Path
 
 import pytest
 
-DSN = os.environ.get("BALLAN_TEST_DSN")
-RACINE_MIGRATIONS = Path(__file__).resolve().parents[2] / "migrations"
+from tests.integration.outils_pg import RAISON_SAUT, base_disponible, psql, valeurs
 
-pytestmark = pytest.mark.skipif(
-    not DSN or shutil.which("psql") is None,
-    reason="BALLAN_TEST_DSN non defini ou psql absent",
-)
+pytestmark = pytest.mark.skipif(not base_disponible(), reason=RAISON_SAUT)
 
 ETAB = "11111111-1111-1111-1111-111111111111"
 ENS_A = "22222222-2222-2222-2222-222222222222"
 ENS_B = "33333333-3333-3333-3333-333333333333"
 
 
-def psql(sql: str, *, fichier: Path | None = None) -> subprocess.CompletedProcess[str]:
-    commande = ["psql", "-v", "ON_ERROR_STOP=1", "-q", "-X", DSN]
-    commande += ["-f", str(fichier)] if fichier else ["-c", sql]
-    return subprocess.run(commande, capture_output=True, text=True, timeout=60)
+@pytest.fixture(autouse=True)
+def jeu_d_essai(base_vide):
+    pose = psql(
+        f"INSERT INTO etablissement (id, nom) VALUES ('{ETAB}', 'Ecole Al-Nour'); "
+        "INSERT INTO ressource (id, etablissement_id, libelle) VALUES "
+        f"('{ENS_A}', '{ETAB}', 'Mme B.'), ('{ENS_B}', '{ETAB}', 'M. A.');"
+    )
+    assert pose.returncode == 0, pose.stderr
 
 
 def inserer_rdv(
@@ -52,41 +49,14 @@ def inserer_rdv(
     )
 
 
-@pytest.fixture(scope="module", autouse=True)
-def schema():
-    """Reconstruit le schema a partir des fichiers de migration."""
-    remise_a_zero = psql("DROP SCHEMA IF EXISTS public CASCADE; CREATE SCHEMA public;")
-    assert remise_a_zero.returncode == 0, remise_a_zero.stderr
-
-    fichiers = sorted(RACINE_MIGRATIONS.glob("[0-9]*.sql"))
-    assert fichiers, "aucun fichier de migration trouve"
-    for fichier in fichiers:
-        applique = psql("", fichier=fichier)
-        assert applique.returncode == 0, f"{fichier.name} : {applique.stderr}"
-    yield
-
-
-@pytest.fixture(autouse=True)
-def jeu_d_essai():
-    psql(
-        "TRUNCATE etablissement CASCADE; "
-        f"INSERT INTO etablissement (id, nom) VALUES ('{ETAB}', 'Ecole Al-Nour'); "
-        "INSERT INTO ressource (id, etablissement_id, libelle) VALUES "
-        f"('{ENS_A}', '{ETAB}', 'Mme B.'), ('{ENS_B}', '{ETAB}', 'M. A.');"
-    )
-    yield
-
-
 # -- contrainte d'exclusion -------------------------------------------
 
 
 def test_les_migrations_s_appliquent_sur_une_base_vierge():
-    tables = psql(
+    assert valeurs(
         "SELECT count(*) FROM information_schema.tables "
         "WHERE table_schema = 'public' AND table_name = 'rendez_vous'"
-    )
-    assert tables.returncode == 0
-    assert "1" in tables.stdout
+    ) == ["1"]
 
 
 def test_deux_reservations_du_meme_creneau_la_seconde_est_refusee_par_la_base():
@@ -168,3 +138,21 @@ def test_une_ouverture_exceptionnelle_sans_tranche_horaire_est_refusee():
     )
     assert sans_heures.returncode != 0
     assert "exception_tranche_obligatoire" in sans_heures.stderr
+
+
+def test_une_langue_par_defaut_hors_des_langues_actives_est_refusee():
+    incoherent = psql(
+        "INSERT INTO etablissement (nom, langues_actives, langue_defaut) VALUES "
+        "('Ecole X', ARRAY['fr','ar'], 'so')"
+    )
+    assert incoherent.returncode != 0
+    assert "etablissement_langue_defaut_active" in incoherent.stderr
+
+
+def test_un_jour_ouvre_hors_de_la_semaine_est_refuse():
+    absurde = psql(
+        "INSERT INTO etablissement (nom, jours_ouvres) VALUES "
+        "('Ecole X', ARRAY[6,0,1,2,9]::smallint[])"
+    )
+    assert absurde.returncode != 0
+    assert "etablissement_jours_ouvres_valides" in absurde.stderr

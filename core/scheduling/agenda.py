@@ -89,15 +89,20 @@ class AgendaMemoire:
             return occupation
 
     def annuler(self, reference_id: str) -> bool:
+        """Passe le rendez-vous en annule, sans l'effacer.
+
+        On garde la ligne : un rendez-vous annule doit rester visible au
+        secretariat et dans le rapport mensuel. Rend ``False`` si la
+        reference est inconnue.
+        """
         with self._verrou:
-            avant = len(self._occupations)
+            vises = [o for o in self._occupations if o.reference_id == reference_id]
+            if not vises:
+                return False
             self._occupations = [
-                o if o.reference_id != reference_id else _annulee(o) for o in self._occupations
+                _annulee(o) if o.reference_id == reference_id else o for o in self._occupations
             ]
-            return avant > 0 and any(
-                o.reference_id == reference_id and o.statut is StatutRendezVous.ANNULE
-                for o in self._occupations
-            )
+            return True
 
 
 def _annulee(occupation: Occupation) -> Occupation:

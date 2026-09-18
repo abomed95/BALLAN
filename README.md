@@ -92,15 +92,20 @@ Ces règles sont vérifiées par des tests qui ne doivent jamais être retirés.
 - **Aucune information nominative sur un élève ne sort sans vérification du
   lien familial**, faite côté serveur à chaque requête
   (`tests/test_cloisonnement_familial.py`). Un numéro non rattaché n'obtient
-  rien, pas même la confirmation qu'un élève est inscrit.
-- **Aucune note, appréciation ou information de comportement** ne transite
-  par BALLAN (`tests/test_interdits_pedagogiques.py`, lot 3).
+  rien, pas même la confirmation qu'un élève est inscrit : le refus est
+  identique que l'élève existe ou non.
+- **Date de naissance réduite à l'année**, pas de photo, pas de donnée de
+  santé, pas d'appréciation (`tests/test_donnees_minimales_eleve.py`). Le
+  test inspecte la *forme* des modèles et du schéma : ajouter un champ
+  `moyenne` ou `photo_url` fait échouer la suite.
 - **Deux parents ne peuvent pas réserver le même créneau**
   (`tests/test_conflits_creneaux.py`, doublé par une contrainte d'exclusion
   PostgreSQL vérifiée dans `tests/integration/`).
-- **Date de naissance réduite à l'année**, pas de photo, pas de donnée de
-  santé, pas d'appréciation — contraintes de schéma, pas conventions.
-- **Un changement de numéro passe par le secrétariat**, jamais par l'agent.
+- **Un changement de numéro passe par le secrétariat**, jamais par l'agent —
+  et l'agent n'a aucun chemin de lecture vers `autorise_a_recuperer`, qui
+  touche à des situations de garde.
+- **Aucune note, appréciation ou information de comportement** ne transite
+  par BALLAN (`tests/test_interdits_pedagogiques.py`, lot 3).
 
 ---
 
