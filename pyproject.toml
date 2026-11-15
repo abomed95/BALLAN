@@ -4,27 +4,34 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ballan"
-version = "0.1.0"
+version = "0.2.0"
 description = "BALLAN — agent de rendez-vous, de rappels et de communication pour ecoles privees"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
 
-# Le noyau domaine (creneaux, calendrier, i18n, regles) est en Python pur :
-# aucune dependance, donc testable sans base de donnees ni reseau.
+# Le domaine (core/, verticals/) est en Python pur : aucune dependance,
+# testable sans base de donnees ni reseau. Le service (application/) ajoute
+# le serveur HTTP, le pilote PostgreSQL et le client HTTP pour WhatsApp.
+# Versions exactes de production : requirements/serveur.lock.
 dependencies = []
 
 [project.optional-dependencies]
-api = ["fastapi>=0.110", "uvicorn[standard]>=0.27", "pydantic>=2.6", "httpx>=0.27"]
-db = ["sqlalchemy>=2.0", "psycopg[binary]>=3.1"]
-sched = ["apscheduler>=3.10"]
-dev = ["pytest>=8.0", "ruff>=0.4"]
+serveur = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "httpx>=0.27",
+    "psycopg[binary,pool]>=3.2",
+]
+dev = ["ballan[serveur]", "pytest>=8.0", "ruff>=0.4", "httpx2>=2.0"]
 
-[tool.setuptools]
-packages = ["core", "verticals"]
+[project.scripts]
+ballan = "application.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["core*", "verticals*", "application*"]
 
 [tool.setuptools.package-data]
 core = ["i18n/locales/*.json"]
-verticals = ["school/prompts/*", "school/templates/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

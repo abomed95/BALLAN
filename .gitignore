@@ -13,3 +13,9 @@ venv/
 node_modules/
 dashboard/dist/
 .DS_Store
+
+# Donnees de l ecole : jamais dans le depot.
+sauvegardes/*
+!sauvegardes/.gitkeep
+config/*
+!config/.gitkeep

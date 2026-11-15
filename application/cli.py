@@ -34,10 +34,11 @@ def _reglages() -> Reglages:
     return Reglages.depuis_environnement()
 
 
-def _exiger_base(reglages: Reglages) -> str:
-    if not reglages.database_url:
+def _dsn() -> str:
+    dsn = _environnement().get("BALLAN_DATABASE_URL")
+    if not dsn:
         raise ErreurBallan("BALLAN_DATABASE_URL n'est pas defini")
-    return reglages.database_url
+    return dsn
 
 
 # -- commandes ---------------------------------------------------------
@@ -46,7 +47,9 @@ def _exiger_base(reglages: Reglages) -> str:
 def cmd_migrer(_args) -> int:
     from application.persistance.migrations import appliquer_migrations
 
-    appliquees = appliquer_migrations(_exiger_base(_reglages()))
+    # Les migrations precedent l'import, donc BALLAN_ETABLISSEMENT_ID : seule
+    # l'adresse de la base est exigee ici.
+    appliquees = appliquer_migrations(_dsn())
     print("migrations appliquees : " + (", ".join(appliquees) if appliquees else "aucune"))
     return 0
 
@@ -64,11 +67,8 @@ def cmd_importer(args) -> int:
         print("essai, rien n'est ecrit : " + json.dumps(donnees.resume()))
         return 0
     # L'import n'a besoin que de la base : pas de controle des reglages WhatsApp.
-    dsn = _environnement().get("BALLAN_DATABASE_URL")
-    if not dsn:
-        raise ErreurBallan("BALLAN_DATABASE_URL n'est pas defini")
     resume = ecrire_postgres(
-        dsn,
+        _dsn(),
         donnees,
         marquer_sortis=not args.garder_absents,
     )

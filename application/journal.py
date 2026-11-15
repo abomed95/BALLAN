@@ -30,6 +30,15 @@ def masquer_numeros(texte: str) -> str:
     return _NUMERO.sub(masque, texte)
 
 
+#: Parametres d'URL : le webhook recoit le jeton de verification de Meta en
+#: parametre (``hub.verify_token``). Rien de ce qui suit ``?`` n'est journalise.
+_PARAMETRES_URL = re.compile(r"\?[^\s\"]*")
+
+
+def masquer(texte: str) -> str:
+    return masquer_numeros(_PARAMETRES_URL.sub("?…", texte))
+
+
 class FormatJson(logging.Formatter):
     """Une ligne JSON par evenement : lisible par docker logs comme par un collecteur."""
 
@@ -38,10 +47,10 @@ class FormatJson(logging.Formatter):
             "t": datetime.fromtimestamp(record.created, UTC).isoformat(timespec="milliseconds"),
             "niveau": record.levelname,
             "source": record.name,
-            "message": masquer_numeros(record.getMessage()),
+            "message": masquer(record.getMessage()),
         }
         if record.exc_info:
-            entree["exception"] = masquer_numeros(self.formatException(record.exc_info))
+            entree["exception"] = masquer(self.formatException(record.exc_info))
         return json.dumps(entree, ensure_ascii=False)
 
 

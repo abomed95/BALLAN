@@ -344,3 +344,14 @@ def test_les_numeros_sont_masques_dans_les_journaux():
     ligne = json.loads(FormatJson().format(enregistrement))
     assert "77202020" not in ligne["message"] and "2020" in ligne["message"]
     assert masquer_numeros("le 2026-11-15") == "le 2026-11-15"
+
+
+def test_les_parametres_d_url_ne_sont_jamais_journalises():
+    """Le jeton de verification de Meta arrive en parametre d'URL."""
+    message = '127.0.0.1 - "GET /webhook/whatsapp?hub.verify_token=SECRET&hub.challenge=1 HTTP/1.1"'
+    enregistrement = logging.LogRecord(
+        "uvicorn.access", logging.INFO, __file__, 1, message, (), None
+    )
+    ligne = json.loads(FormatJson().format(enregistrement))
+    assert "SECRET" not in ligne["message"]
+    assert "/webhook/whatsapp?…" in ligne["message"]

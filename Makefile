@@ -1,9 +1,9 @@
-.PHONY: install test test-integration lint i18n db-up db-down
+.PHONY: install test test-integration lint i18n db-up db-down simuler servir
 
 DSN ?= postgresql://ballan:ballan@localhost:5433/ballan_test
 
 install:
-	python -m pip install -e ".[dev]"
+	python -m pip install -r requirements/serveur.lock -e ".[dev]"
 
 # Suite complete, sans base de donnees ni reseau.
 test:
@@ -25,3 +25,11 @@ db-up:
 
 db-down:
 	docker compose -f docker/docker-compose.dev.yml down -v
+
+# Conversation de demonstration, sans WhatsApp ni base.
+simuler:
+	python -m application simuler
+
+# API en mode demonstration (memoire), sur http://localhost:8000
+servir:
+	python -m application servir --hote 127.0.0.1 --port 8000

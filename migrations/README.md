@@ -9,21 +9,31 @@ d'abstraction de plus.
 |---|---|---|
 | `0001_core.sql` | 0 | Noyau : etablissement, ressource, disponibilite, exception_agenda, contact, rendez_vous |
 | `0002_school.sql` | 1 | Structure scolaire : annee, periodes, niveaux, classes, enseignants, eleves, familles, liens parent-eleve |
+| `0003_conversation.sql` | 2, 3, 5 | Conversation, escalade, anti-doublon WhatsApp, motif -> ressource, rappels |
 
 ## Appliquer
 
+En production, `ballan migrer` (lance automatiquement par le service
+`migrations` de docker-compose) applique les fichiers manquants, chacun dans
+sa transaction, et les inscrit dans `schema_migrations`. Un verrou
+consultatif empeche deux conteneurs de migrer en meme temps.
+
+A la main, sur une base de developpement :
+
 ```sh
-psql -v ON_ERROR_STOP=1 -d "$DATABASE_URL" -f migrations/0001_core.sql
-psql -v ON_ERROR_STOP=1 -d "$DATABASE_URL" -f migrations/0002_school.sql
+for f in migrations/0*.sql; do psql -v ON_ERROR_STOP=1 -d "$DATABASE_URL" -f "$f"; done
 ```
+
+Une migration publiee ne se modifie plus : on en ajoute une nouvelle.
 
 ## Regles
 
 - **Une migration ne cree pas de table sans code qui l'utilise.** Les tables
-  `conversation`, `message`, `rappel`, `journal_escalade`, `session_reunion`,
-  `annonce`, `echeance_scolarite` et `signalement_absence` sont bien des
-  tables du produit (BALLAN.md §4) ; elles arriveront avec les lots 2 a 5,
-  en meme temps que leur code.
+  `session_reunion`, `annonce`, `echeance_scolarite` et `signalement_absence`
+  arriveront avec les lots 4 et 5, en meme temps que leur code.
+- **Aucun texte de message de parent n'est stocke** : `conversation` ne garde
+  que l'etape et des identifiants, `message_entrant` que l'identifiant
+  technique WhatsApp. Les deux sont purges apres 30 jours (`ballan purger`).
 - **Les contraintes vivent dans la base.** Le cloisonnement familial, le
   non-chevauchement des rendez-vous et le minimum de donnees sur un mineur
   ne sont pas des conventions : ce sont des contraintes `CHECK`, `UNIQUE`,
