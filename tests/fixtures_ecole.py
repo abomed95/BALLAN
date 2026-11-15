@@ -13,17 +13,20 @@ from __future__ import annotations
 
 from datetime import UTC, date, datetime, time
 
-from core.models import Contact, Disponibilite, Etablissement, Jour, Langue
+from core.models import Contact, Disponibilite, Etablissement, Jour, Langue, Ressource
 from core.scheduling import Calendrier
+from verticals.school.configuration import ConfigurationEcole
 from verticals.school.depot import DepotEcoleMemoire
 from verticals.school.models import (
     AnneeScolaire,
     Classe,
+    DestinataireRendezVous,
     Eleve,
     Enseignant,
     Famille,
     LienParente,
     LienParentEleve,
+    MotifRendezVous,
     Niveau,
     Parent,
     Periode,
@@ -367,4 +370,56 @@ def calendrier_noyau() -> Calendrier:
         etablissement=ecole(),
         disponibilites=disponibilites(),
         exceptions=[],
+    )
+
+
+# -- configuration et motifs (lot 3) -----------------------------------
+
+DIRECTION = Ressource(id="direction", etablissement_id=ETAB, libelle="Direction")
+
+MOTIFS = [
+    MotifRendezVous(
+        id="motif-suivi",
+        etablissement_id=ETAB,
+        libelle_i18n={"fr": "Suivi de la scolarite", "ar": "متابعة الدراسة"},
+        duree_min=30,
+        ordre=1,
+    ),
+    MotifRendezVous(
+        id="motif-direction",
+        etablissement_id=ETAB,
+        libelle_i18n={"fr": "Rencontre avec la direction"},
+        duree_min=30,
+        destinataire=DestinataireRendezVous.DIRECTION,
+        ressource_id="direction",
+        ordre=2,
+    ),
+    MotifRendezVous(
+        id="motif-ancien",
+        etablissement_id=ETAB,
+        libelle_i18n={"fr": "Ancien motif"},
+        actif=False,
+        ordre=3,
+    ),
+]
+
+
+def configuration() -> ConfigurationEcole:
+    dispos = disponibilites() + [
+        Disponibilite(
+            id="dispo-direction",
+            etablissement_id=ETAB,
+            ressource_id="direction",
+            jour=Jour.MERCREDI,
+            heure_debut=time(10, 0),
+            heure_fin=time(11, 0),
+        )
+    ]
+    return ConfigurationEcole(
+        etablissement=ecole(),
+        annee=ANNEE,
+        periodes=tuple(PERIODES),
+        disponibilites=tuple(dispos),
+        ressources=tuple([e.vers_ressource() for e in ENSEIGNANTS] + [DIRECTION]),
+        motifs=tuple(MOTIFS),
     )

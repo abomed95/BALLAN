@@ -14,9 +14,12 @@ Personne n'appelle un depot directement depuis l'agent ou l'API.
 from __future__ import annotations
 
 from collections.abc import Iterable
+from dataclasses import replace
+from datetime import datetime
 from typing import Protocol
 
 from core.models.contact import Contact
+from core.models.enums import Langue
 from core.telephone import normaliser
 from verticals.school.models import (
     AnneeScolaire,
@@ -55,6 +58,17 @@ class DepotEcole(Protocol):
     def enseignant(self, enseignant_id: str) -> Enseignant | None: ...
 
     def famille(self, famille_id: str) -> Famille | None: ...
+
+    # -- preferences du contact sur son propre numero ------------------
+    #
+    # Ce sont les seules ecritures ouvertes a l'agent : elles ne touchent
+    # que le numero qui ecrit, jamais un lien familial (§8.2, §8.3).
+
+    def marquer_stop(self, contact_id: str, instant: datetime) -> None: ...
+
+    def marquer_consentement(self, contact_id: str, instant: datetime) -> None: ...
+
+    def definir_langue_contact(self, contact_id: str, langue: Langue) -> None: ...
 
 
 class DepotEcoleMemoire:
@@ -136,6 +150,23 @@ class DepotEcoleMemoire:
 
     def famille(self, famille_id: str) -> Famille | None:
         return self.familles.get(famille_id)
+
+    # -- preferences du contact ----------------------------------------
+
+    def marquer_stop(self, contact_id: str, instant: datetime) -> None:
+        contact = self.contacts.get(contact_id)
+        if contact is not None:
+            self.contacts[contact_id] = replace(contact, stoppe_at=instant)
+
+    def marquer_consentement(self, contact_id: str, instant: datetime) -> None:
+        contact = self.contacts.get(contact_id)
+        if contact is not None:
+            self.contacts[contact_id] = replace(contact, consenti_at=instant, stoppe_at=None)
+
+    def definir_langue_contact(self, contact_id: str, langue: Langue) -> None:
+        contact = self.contacts.get(contact_id)
+        if contact is not None:
+            self.contacts[contact_id] = replace(contact, langue_preferee=langue)
 
     # -- ecriture, reservee au secretariat -----------------------------
     #

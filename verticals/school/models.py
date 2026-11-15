@@ -13,13 +13,15 @@ des mineurs. La classe ``Eleve`` porte donc le strict minimum, et
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, datetime
 from enum import StrEnum
 
 from core.errors import ErreurConfiguration
 from core.i18n.libelles import LibelleI18n
-from core.models.enums import Langue
+from core.models.agenda import Occupation
+from core.models.enums import Acteur, Langue, StatutRendezVous
 from core.models.etablissement import Ressource
+from core.temps import exiger_conscient
 
 #: Bornes de bon sens pour l'annee de naissance d'un eleve.
 ANNEE_NAISSANCE_MIN = 1990
@@ -256,20 +258,77 @@ class LienParentEleve:
 
 @dataclass(frozen=True)
 class MotifRendezVous:
-    """Catalogue de motifs defini par l'ecole, jamais invente par l'agent."""
+    """Catalogue de motifs defini par l'ecole, jamais invente par l'agent.
+
+    Un motif adresse a l'enseignant se resout vers l'enseignant principal de
+    la classe de l'enfant. Un motif adresse a la direction ou a la vie
+    scolaire designe explicitement la ressource qui recoit (``ressource_id``) :
+    l'agent ne devine jamais a qui envoyer un parent.
+    """
 
     id: str
     etablissement_id: str
     libelle_i18n: LibelleI18n
     duree_min: int = 30
     destinataire: DestinataireRendezVous = DestinataireRendezVous.ENSEIGNANT
+    ressource_id: str | None = None
     actif: bool = True
+    ordre: int = 0
 
     def __post_init__(self) -> None:
         if not self.libelle_i18n:
             raise ErreurConfiguration("un motif doit avoir un libelle")
         if self.duree_min <= 0:
             raise ErreurConfiguration("la duree d'un motif doit etre strictement positive")
+        if self.destinataire is not DestinataireRendezVous.ENSEIGNANT and not self.ressource_id:
+            raise ErreurConfiguration(
+                f"un motif adresse a {self.destinataire.value} doit designer sa ressource"
+            )
+
+
+# -- rendez-vous -------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class RendezVous:
+    """Un rendez-vous scolaire : le rendez-vous du noyau, plus l'eleve.
+
+    Il ne porte ni texte libre ni commentaire : un champ « remarque » serait
+    la porte d'entree d'appreciations et d'informations de comportement,
+    exactement ce que le §3 exclut.
+    """
+
+    id: str
+    etablissement_id: str
+    ressource_id: str
+    eleve_id: str
+    debut: datetime
+    fin: datetime
+    motif_id: str | None = None
+    parent_id: str | None = None
+    contact_id: str | None = None
+    statut: StatutRendezVous = StatutRendezVous.CONFIRME
+    cree_par: Acteur = Acteur.AGENT
+    rappel_envoye_at: datetime | None = None
+
+    def __post_init__(self) -> None:
+        exiger_conscient(self.debut, "RendezVous.debut")
+        exiger_conscient(self.fin, "RendezVous.fin")
+        if self.fin <= self.debut:
+            raise ErreurConfiguration("un rendez-vous doit se terminer apres son debut")
+
+    @property
+    def est_confirme(self) -> bool:
+        return self.statut is StatutRendezVous.CONFIRME
+
+    def vers_occupation(self) -> Occupation:
+        return Occupation(
+            ressource_id=self.ressource_id,
+            debut=self.debut,
+            fin=self.fin,
+            statut=self.statut,
+            reference_id=self.id,
+        )
 
 
 @dataclass(frozen=True)

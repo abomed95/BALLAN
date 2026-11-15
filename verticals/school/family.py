@@ -321,15 +321,19 @@ class ServiceFamille:
     # -- langue --------------------------------------------------------
 
     def langue_du_perimetre(self, perimetre: Perimetre, defaut: Langue) -> Langue:
-        """Langue preferee du parent, sinon celle de l'etablissement."""
-        for parent_id in sorted(perimetre.parent_ids):
-            parent = self._depot.parent(parent_id)
-            if parent is not None and parent.langue_preferee is not None:
-                return parent.langue_preferee
+        """Langue choisie par le numero, sinon celle du parent, sinon l'ecole.
+
+        Le choix fait par le contact lui-meme (commande « langue ») prime sur
+        la preference saisie par l'ecole a l'inscription.
+        """
         if perimetre.contact_id is not None:
             contact = self._depot.contact(perimetre.contact_id)
             if contact is not None and contact.langue_preferee is not None:
                 return contact.langue_preferee
+        for parent_id in sorted(perimetre.parent_ids):
+            parent = self._depot.parent(parent_id)
+            if parent is not None and parent.langue_preferee is not None:
+                return parent.langue_preferee
         return defaut
 
 

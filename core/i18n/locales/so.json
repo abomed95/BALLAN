@@ -40,5 +40,46 @@
   },
   "escalade": {
     "transmis": "Codsigaaga waxaa loo gudbiyay xafiiska dugsiga. Qof baa kuu soo jawaabi doona."
+  },
+  "langue": {
+    "nom": "Soomaali"
+  },
+  "agent": {
+    "accueil": "Salaan, waa kaaliyaha {ecole}.",
+    "menu": "1. Ballan qabso\n2. Eeg ama jooji ballan\n3. La hadal xafiiska dugsiga\n4. Beddel luqadda\n\nKu jawaab lambarka aad dooratay.",
+    "retour_menu": "Ku jawaab 0 si aad ugu laabato liiska.",
+    "choix_invalide": "Ma fahmin. Ku jawaab mid ka mid ah lambarrada la soo jeediyay, ama 0 si aad ugu laabato liiska.",
+    "ligne_option": "{numero}. {libelle}",
+    "choix_enfant": "Ilmahee?",
+    "ligne_enfant": "{numero}. {prenom} ({classe})",
+    "choix_motif": "Waa maxay sababta ballanta ee {prenom}?",
+    "choix_creneau": "Kuwani waa waqtiyada bannaan ee ugu dhow ee {ressource}:",
+    "aucun_creneau": "Ma jiro waqti bannaan oo {ressource} ah saddexda toddobaad ee soo socda. Codsigaaga waxaan u gudbinayaa xafiiska dugsiga, waana lagula soo xiriiri doonaa.",
+    "confirmation": "Waxaan u qabanayaa {prenom}:\n{date}, {ressource}\nSababta: {motif}\n\n1. Xaqiiji\n2. Dooro waqti kale",
+    "rdv_confirme": "Waa la xaqiijiyay: ballan {prenom} ah {date}, {ressource}. Si aad u joojiso, qor « menu » kadibna dooro 2.",
+    "creneau_pris": "Waqtigan hadda ma bannaana. Kuwani waa waqtiyo kale:",
+    "aucun_rdv": "Ma lihid ballan soo socota.",
+    "liste_rdv": "Ballamahaaga soo socda. Ku jawaab lambarka ballanta aad rabto inaad joojiso:",
+    "ligne_rdv": "{numero}. {prenom} — {date}, {ressource}",
+    "confirmation_annulation": "Ma joojinaysaa ballanta {prenom} ee {date}?\n\n1. Haa, jooji\n2. Maya, hay",
+    "rdv_annule": "Ballanta {prenom} ee {date} waa la joojiyay.",
+    "rdv_conserve": "Ballanta waa la hayaa.",
+    "choix_langue": "Dooro luqaddaada:",
+    "langue_changee": "Waa la qoray, hadda kadib waxaan kuugu qori doonaa Soomaali.",
+    "sujet_resultats": "Ma bixiyo dhibcaha, natiijooyinka ama qiimeynta. Macallinka ayaa kaala hadli kara ballan ahaan: ku jawaab 1 si aad u qabsato.",
+    "sujet_comportement": "Kama jawaabo arrimaha dhaqanka ama edbinta. Macallinka ama maamulka ayaa kaala hadli kara ballan ahaan: ku jawaab 1 si aad u qabsato.",
+    "sujet_escalade": "Su'aashan anigu ma xallin karo. Waxaan u gudbinayaa xafiiska dugsiga, waana lagula soo xiriiri doonaa dhowaan.",
+    "message_non_texte": "Waxaan akhriyaa fariimaha qoraalka ah oo keliya. Ku jawaab lambar, ama qor « menu ».",
+    "incident": "Cillad farsamo ayaa iga hor istaagtay inaan hadda jawaabo. Xafiiska dugsiga waa la ogeysiiyay, waana lagula soo xiriiri doonaa."
+  },
+  "consentement": {
+    "stop": "Waa la qoray: mar dambe ma heli doontid xusuusin ama ogeysiis. Weli waad ii qori kartaa. Si aad dib ugu furto, qor START.",
+    "reprise": "Waa la qoray: xusuusinta iyo ogeysiisyada dib ayaa loo furay."
+  },
+  "rappel": {
+    "rendez_vous": "Xusuusin: ballan {prenom} ah {date}, {ressource}. Si aad u joojiso, qor « menu » kadibna dooro 2."
+  },
+  "secretariat": {
+    "nouvelle_escalade": "BALLAN — codsi la xallinayo ({motif}): {numero}"
   }
 }

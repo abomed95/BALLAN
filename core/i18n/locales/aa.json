@@ -3,7 +3,7 @@
     "langue": "aa",
     "statut": "a_relire",
     "revu_par": null,
-    "note": "Traduction de travail. Aucune ecole ne doit activer la langue afar tant que statut != 'relu' — voir locales/RELECTURE.md."
+    "note": "Traduction de travail, NON VERIFIEE. Les cles agent.*, consentement.*, rappel.* et secretariat.* (lot 3) sont un premier jet a reecrire entierement par un locuteur natif. Aucune ecole ne doit activer l'afar tant que statut != 'relu' — voir locales/RELECTURE.md."
   },
   "date": {
     "jours": [
@@ -40,5 +40,46 @@
   },
   "escalade": {
     "transmis": "Ku essero iskoolih biiroh gacsimte. Num sin luk yaabele."
+  },
+  "langue": {
+    "nom": "Qafaraf"
+  },
+  "agent": {
+    "accueil": "Nagaada, {ecole} kaalo mashiinih.",
+    "menu": "1. Ballan oys\n2. Ballan bal, hinnay bey\n3. Iskoolih biiro luk yab\n4. Afa ceddes\n\nDooritey lambar ruub.",
+    "retour_menu": "Menu fan gacsamtaah 0 ruub.",
+    "choix_invalide": "Maaxigiyo. Yoh yaybulle lambarih teyna ruub, hinnay 0 ruub.",
+    "ligne_option": "{numero}. {libelle}",
+    "choix_enfant": "Ayti urtak?",
+    "ligne_enfant": "{numero}. {prenom} ({classe})",
+    "choix_motif": "{prenom} ballanih sababa maca?",
+    "choix_creneau": "{ressource} luk tan saacat:",
+    "aucun_creneau": "{ressource} luk sidiica ayyaamih addal saaca maleela. Ku esserot iskoolih biiroh gacsa, kaadu sin luk yaabelen.",
+    "confirmation": "{prenom} kee oysa:\n{date}, {ressource}\nSababa: {motif}\n\n1. Xaqiiji\n2. Teyni saaca doori",
+    "rdv_confirme": "Xaqiiqitee: {prenom} ballan {date}, {ressource}. Bayissaah « menu » ab, 2 doori.",
+    "creneau_pris": "Ama saaca maleela. Tama teyni saacat:",
+    "aucun_rdv": "Ballan siinik maleela.",
+    "liste_rdv": "Siinik ballan. Bayisse faxxinte lambar ruub:",
+    "ligne_rdv": "{numero}. {prenom} — {date}, {ressource}",
+    "confirmation_annulation": "{prenom} ballan {date} bayissaa?\n\n1. Yey, bey\n2. Maleela, dag",
+    "rdv_annule": "{prenom} ballan {date} bayte.",
+    "rdv_conserve": "Ballan dagte.",
+    "choix_langue": "Afa doori:",
+    "langue_changee": "Yoh yaybulle, Qafaraf siin xagissam.",
+    "sujet_resultats": "Natiijaa kee qiimeyna maxaxxa. Barsiisaa ballanih addal siin luk yaabe: ballan oysaah 1 ruub.",
+    "sujet_comportement": "Dhaqanih caddo maxaxxa. Barsiisaa hinnay idaara ballanih addal siin luk yaabe: ballan oysaah 1 ruub.",
+    "sujet_escalade": "Ama esero gacissam maduure. Iskoolih biiroh gacsa, kaadu sin luk yaabelen.",
+    "message_non_texte": "Yoo xagissime fariima akriyam. Lambar ruub, hinnay « menu » xagis.",
+    "incident": "Farsamoh cillat tan. Iskoolih biiro yaybulle, kaadu sin luk yaabelen."
+  },
+  "consentement": {
+    "stop": "Yoh yaybulle: xusuusin kee ogeysiis siinik maradda. Ku fariima ruubta dudda. Gacsaah START xagis.",
+    "reprise": "Yoh yaybulle: xusuusin kee ogeysiis gacte."
+  },
+  "rappel": {
+    "rendez_vous": "Xusuusin: {prenom} ballan {date}, {ressource}. Bayissaah « menu » ab, 2 doori."
+  },
+  "secretariat": {
+    "nouvelle_escalade": "BALLAN — esero ({motif}): {numero}"
   }
 }
