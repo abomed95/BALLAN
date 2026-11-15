@@ -1,0 +1,85 @@
+{
+  "_meta": {
+    "langue": "ar",
+    "statut": "a_relire",
+    "revu_par": null,
+    "note": "Relecture par un locuteur natif prevue au lot 7. Chiffres occidentaux imposes (BALLAN.md §7)."
+  },
+  "date": {
+    "jours": [
+      "الاثنين",
+      "الثلاثاء",
+      "الأربعاء",
+      "الخميس",
+      "الجمعة",
+      "السبت",
+      "الأحد"
+    ],
+    "mois": [
+      "يناير",
+      "فبراير",
+      "مارس",
+      "أبريل",
+      "مايو",
+      "يونيو",
+      "يوليو",
+      "أغسطس",
+      "سبتمبر",
+      "أكتوبر",
+      "نوفمبر",
+      "ديسمبر"
+    ],
+    "format_date": "{jour} {numero} {mois}",
+    "format_date_courte": "{numero} {mois}",
+    "format_heure": "{heures}:{minutes}",
+    "format_datetime": "{date} الساعة {heure}",
+    "format_plage_horaire": "{debut} – {fin}"
+  },
+  "acces": {
+    "refuse": "لا يمكنني الرد على هذا الطلب من هذا الرقم. سأحوّله إلى إدارة المدرسة وسيتم الاتصال بكم."
+  },
+  "escalade": {
+    "transmis": "تم تحويل طلبكم إلى إدارة المدرسة. سيرد عليكم أحد الموظفين."
+  },
+  "langue": {
+    "nom": "العربية"
+  },
+  "agent": {
+    "accueil": "مرحبًا، معكم المساعد الآلي لـ{ecole}.",
+    "menu": "1. حجز موعد\n2. عرض موعد أو إلغاؤه\n3. التحدث مع إدارة المدرسة\n4. تغيير اللغة\n\nأرسلوا رقم اختياركم.",
+    "retour_menu": "أرسلوا 0 للعودة إلى القائمة.",
+    "choix_invalide": "لم أفهم. أرسلوا أحد الأرقام المقترحة، أو 0 للعودة إلى القائمة.",
+    "ligne_option": "{numero}. {libelle}",
+    "choix_enfant": "لأي طفل؟",
+    "ligne_enfant": "{numero}. {prenom} ({classe})",
+    "choix_motif": "ما سبب الموعد بخصوص {prenom}؟",
+    "choix_creneau": "هذه أقرب المواعيد المتاحة مع {ressource}:",
+    "aucun_creneau": "لا يوجد موعد متاح مع {ressource} خلال الأسابيع الثلاثة القادمة. سأحوّل طلبكم إلى إدارة المدرسة وسيتم الاتصال بكم.",
+    "confirmation": "سأحجز لـ{prenom}:\n{date}، مع {ressource}\nالسبب: {motif}\n\n1. تأكيد\n2. اختيار موعد آخر",
+    "rdv_confirme": "تم التأكيد: موعد لـ{prenom} يوم {date}، مع {ressource}. للإلغاء، اكتبوا «menu» ثم اختاروا 2.",
+    "creneau_pris": "هذا الموعد لم يعد متاحًا. إليكم مواعيد أخرى:",
+    "aucun_rdv": "ليس لديكم أي موعد قادم.",
+    "liste_rdv": "مواعيدكم القادمة. أرسلوا رقم الموعد الذي تريدون إلغاءه:",
+    "ligne_rdv": "{numero}. {prenom} — {date}، مع {ressource}",
+    "confirmation_annulation": "هل تريدون إلغاء موعد {prenom} يوم {date}؟\n\n1. نعم، إلغاء\n2. لا، الإبقاء عليه",
+    "rdv_annule": "تم إلغاء موعد {prenom} يوم {date}.",
+    "rdv_conserve": "تم الإبقاء على الموعد.",
+    "choix_langue": "اختاروا لغتكم:",
+    "langue_changee": "تم، سأراسلكم من الآن باللغة العربية.",
+    "sujet_resultats": "لا أقدّم الدرجات ولا النتائج ولا الملاحظات. يمكن للمعلم مناقشتها معكم خلال موعد: أرسلوا 1 لحجز موعد.",
+    "sujet_comportement": "لا أتناول مسائل السلوك أو الانضباط. يمكن للمعلم أو للإدارة مناقشتها معكم خلال موعد: أرسلوا 1 لحجز موعد.",
+    "sujet_escalade": "لا يمكنني معالجة هذا السؤال بنفسي. سأحوّله إلى إدارة المدرسة وسيتم الاتصال بكم قريبًا.",
+    "message_non_texte": "أقرأ الرسائل المكتوبة فقط. أرسلوا رقمًا، أو اكتبوا «menu».",
+    "incident": "عطل تقني يمنعني من الرد حاليًا. تم إبلاغ إدارة المدرسة وسيتم الاتصال بكم."
+  },
+  "consentement": {
+    "stop": "تم: لن تصلكم بعد الآن تذكيرات ولا إعلانات. يمكنكم دائمًا مراسلتي. لإعادة تفعيلها، اكتبوا START.",
+    "reprise": "تم: أُعيد تفعيل التذكيرات والإعلانات."
+  },
+  "rappel": {
+    "rendez_vous": "تذكير: موعد لـ{prenom} يوم {date}، مع {ressource}. للإلغاء، اكتبوا «menu» ثم اختاروا 2."
+  },
+  "secretariat": {
+    "nouvelle_escalade": "BALLAN — طلب للمعالجة ({motif}): {numero}"
+  }
+}

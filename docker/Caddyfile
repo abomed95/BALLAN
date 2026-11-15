@@ -1,0 +1,10 @@
+# Terminaison HTTPS devant l'API BALLAN. Le certificat est obtenu et
+# renouvele automatiquement pour BALLAN_DOMAINE (le DNS doit pointer ici).
+{$BALLAN_DOMAINE} {
+	encode gzip
+	header Strict-Transport-Security "max-age=31536000"
+	# La documentation interactive n'est jamais exposee publiquement.
+	@docs path /docs* /openapi.json
+	respond @docs 404
+	reverse_proxy api:8000
+}

@@ -1,0 +1,98 @@
+# Mise en service BALLAN sur un serveur de l'ecole ou un VPS.
+#
+#   cp .env.example .env    # puis renseigner chaque valeur
+#   docker compose up -d --build
+#
+# Voir docs/DEPLOIEMENT.md pour la procedure complete.
+
+name: ballan
+
+x-ballan: &ballan
+  build: .
+  image: ballan:${BALLAN_VERSION:-local}
+  env_file: .env
+  environment:
+    BALLAN_DATABASE_URL: postgresql://ballan:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD manquant dans .env}@postgres:5432/ballan
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options: {max-size: "10m", max-file: "5"}
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ballan
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD manquant dans .env}
+      POSTGRES_DB: ballan
+    volumes:
+      - donnees:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ballan -d ballan"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # Aucun port publie : la base n'est joignable que depuis le reseau interne.
+
+  migrations:
+    <<: *ballan
+    command: ["migrer"]
+    restart: "no"
+    healthcheck: {disable: true}
+    depends_on:
+      postgres: {condition: service_healthy}
+
+  api:
+    <<: *ballan
+    depends_on:
+      migrations: {condition: service_completed_successfully}
+    expose: ["8000"]
+
+  rappels:
+    <<: *ballan
+    command: ["rappels", "--boucle", "1800"]
+    healthcheck: {disable: true}
+    depends_on:
+      migrations: {condition: service_completed_successfully}
+
+  # Purge quotidienne des etats de conversation et anti-doublons (> 30 jours).
+  entretien:
+    <<: *ballan
+    entrypoint: ["sh", "-c", "while true; do python -m application purger --jours 30; sleep 86400; done"]
+    command: []
+    healthcheck: {disable: true}
+    depends_on:
+      migrations: {condition: service_completed_successfully}
+
+  # Sauvegarde quotidienne, 14 jours conserves, dans ./sauvegardes sur l'hote.
+  # A copier regulierement HORS du serveur (voir docs/DEPLOIEMENT.md).
+  sauvegarde:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD manquant dans .env}
+    volumes:
+      - ./sauvegardes:/sauvegardes
+      - ./docker/sauvegarde.sh:/sauvegarde.sh:ro
+    entrypoint: ["sh", "/sauvegarde.sh"]
+    depends_on:
+      postgres: {condition: service_healthy}
+
+  # HTTPS automatique (Let's Encrypt). Meta exige une URL HTTPS publique.
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      BALLAN_DOMAINE: ${BALLAN_DOMAINE:?BALLAN_DOMAINE manquant dans .env}
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_donnees:/data
+      - caddy_config:/config
+    depends_on: [api]
+
+volumes:
+  donnees:
+  caddy_donnees:
+  caddy_config:

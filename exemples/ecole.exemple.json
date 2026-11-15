@@ -1,0 +1,63 @@
+{
+  "_aide": "Modele de configuration d'ecole pour BALLAN. Donnees fictives : remplacer par celles de l'ecole. Dates des fetes religieuses a confirmer chaque annee.",
+  "etablissement": {
+    "cle": "sahan",
+    "nom": "École Sahan",
+    "fuseau": "Africa/Djibouti",
+    "langues_actives": ["fr", "ar", "so"],
+    "langue_defaut": "fr",
+    "jours_ouvres": ["dimanche", "lundi", "mardi", "mercredi", "jeudi"],
+    "silence": {"debut": "21:00", "fin": "07:00"},
+    "delai_minimal_min": 120
+  },
+  "annee": {"libelle": "2026-2027", "debut": "2026-09-06", "fin": "2027-06-24"},
+  "periodes": [
+    {"cle": "t1", "type": "trimestre", "debut": "2026-09-06", "fin": "2026-12-10",
+     "libelle": {"fr": "Premier trimestre", "ar": "الفصل الأول", "so": "Xilliga koowaad"}},
+    {"cle": "vac-t1", "type": "vacances", "debut": "2026-12-13", "fin": "2027-01-02",
+     "libelle": {"fr": "Vacances de fin d'année", "ar": "عطلة نهاية السنة", "so": "Fasaxa dhammaadka sanadka"}},
+    {"cle": "t2", "type": "trimestre", "debut": "2027-01-03", "fin": "2027-03-18",
+     "libelle": {"fr": "Deuxième trimestre", "ar": "الفصل الثاني", "so": "Xilliga labaad"}},
+    {"cle": "vac-t2", "type": "vacances", "debut": "2027-03-21", "fin": "2027-04-03",
+     "libelle": {"fr": "Vacances de printemps", "ar": "عطلة الربيع", "so": "Fasaxa gu'ga"}},
+    {"cle": "t3", "type": "trimestre", "debut": "2027-04-04", "fin": "2027-06-24",
+     "libelle": {"fr": "Troisième trimestre", "ar": "الفصل الثالث", "so": "Xilliga saddexaad"}}
+  ],
+  "niveaux": [
+    {"cle": "cp", "ordre": 1, "libelle": {"fr": "CP", "ar": "السنة الأولى"}},
+    {"cle": "ce1", "ordre": 2, "libelle": {"fr": "CE1", "ar": "السنة الثانية"}},
+    {"cle": "cm2", "ordre": 5, "libelle": {"fr": "CM2", "ar": "السنة الخامسة"}}
+  ],
+  "enseignants": [
+    {"cle": "ens-farah", "nom": "M. Farah", "langues": ["fr", "so"], "duree_creneau_min": 20,
+     "disponibilites": [{"jour": "dimanche", "debut": "07:30", "fin": "09:00"},
+                        {"jour": "mercredi", "debut": "12:00", "fin": "13:00"}]},
+    {"cle": "ens-aicha", "nom": "Mme Aïcha", "langues": ["fr", "ar"], "duree_creneau_min": 20,
+     "disponibilites": [{"jour": "lundi", "debut": "11:00", "fin": "12:30"}]},
+    {"cle": "ens-hassan", "nom": "M. Hassan", "langues": ["fr", "ar", "so"],
+     "disponibilites": [{"jour": "mardi", "debut": "07:30", "fin": "09:30"}]}
+  ],
+  "ressources": [
+    {"cle": "direction", "libelle": "La direction", "duree_creneau_min": 30,
+     "disponibilites": [{"jour": "jeudi", "debut": "09:00", "fin": "11:00"}]}
+  ],
+  "classes": [
+    {"cle": "cp-a", "niveau": "cp", "libelle": "CP A", "enseignant_principal": "ens-farah"},
+    {"cle": "ce1-a", "niveau": "ce1", "libelle": "CE1 A", "enseignant_principal": "ens-aicha"},
+    {"cle": "cm2-a", "niveau": "cm2", "libelle": "CM2 A", "enseignant_principal": "ens-hassan"}
+  ],
+  "motifs": [
+    {"cle": "suivi", "ordre": 1, "duree_min": 20, "destinataire": "enseignant",
+     "libelle": {"fr": "Suivi de la scolarité", "ar": "متابعة الدراسة", "so": "La socodka waxbarashada"}},
+    {"cle": "direction", "ordre": 2, "duree_min": 30, "destinataire": "direction", "ressource": "direction",
+     "libelle": {"fr": "Rencontre avec la direction", "ar": "لقاء مع الإدارة", "so": "Kulan maamulka"}}
+  ],
+  "fermetures": [
+    {"debut": "2027-01-01", "motif": "Jour de l'an"},
+    {"debut": "2027-03-10", "fin": "2027-03-11", "motif": "Aïd el-Fitr (date à confirmer)"}
+  ],
+  "horaires_reduits": [
+    {"debut": "2027-02-08", "fin": "2027-03-09", "heure_debut": "08:00", "heure_fin": "11:30",
+     "motif": "Ramadan (dates à confirmer)"}
+  ]
+}

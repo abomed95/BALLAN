@@ -1,0 +1,24 @@
+# PostgreSQL de developpement, pour les tests d'integration.
+#
+# Ce fichier ne sert qu'a faire tourner tests/integration/ sur un poste de
+# developpement. La composition de mise en service (API, ordonnanceur,
+# tableau de bord, sauvegardes, supervision) arrive au lot 8.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ballan
+      POSTGRES_PASSWORD: ballan
+      POSTGRES_DB: ballan_test
+    ports:
+      # 5433 pour ne pas entrer en conflit avec un PostgreSQL local.
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ballan -d ballan_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    tmpfs:
+      # Base jetable : les tests detruisent et recreent le schema public.
+      - /var/lib/postgresql/data

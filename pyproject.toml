@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ballan"
+version = "0.2.0"
+description = "BALLAN — agent de rendez-vous, de rappels et de communication pour ecoles privees"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+
+# Le domaine (core/, verticals/) est en Python pur : aucune dependance,
+# testable sans base de donnees ni reseau. Le service (application/) ajoute
+# le serveur HTTP, le pilote PostgreSQL et le client HTTP pour WhatsApp.
+# Versions exactes de production : requirements/serveur.lock.
+dependencies = []
+
+[project.optional-dependencies]
+serveur = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "httpx>=0.27",
+    "psycopg[binary,pool]>=3.2",
+]
+dev = ["ballan[serveur]", "pytest>=8.0", "ruff>=0.4", "httpx2>=2.0"]
+
+[project.scripts]
+ballan = "application.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["core*", "verticals*", "application*"]
+
+[tool.setuptools.package-data]
+core = ["i18n/locales/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+filterwarnings = ["error"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

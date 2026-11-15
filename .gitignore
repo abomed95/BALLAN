@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+node_modules/
+dashboard/dist/
+.DS_Store
+
+# Donnees de l ecole : jamais dans le depot.
+sauvegardes/*
+!sauvegardes/.gitkeep
+config/*
+!config/.gitkeep

@@ -1,0 +1,85 @@
+{
+  "_meta": {
+    "langue": "fr",
+    "statut": "reference",
+    "revu_par": "AMD Digital",
+    "note": "Langue de reference. Toute cle nait ici avant d'exister ailleurs."
+  },
+  "date": {
+    "jours": [
+      "lundi",
+      "mardi",
+      "mercredi",
+      "jeudi",
+      "vendredi",
+      "samedi",
+      "dimanche"
+    ],
+    "mois": [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre"
+    ],
+    "format_date": "{jour} {numero} {mois}",
+    "format_date_courte": "{numero} {mois}",
+    "format_heure": "{heures}:{minutes}",
+    "format_datetime": "{date} à {heure}",
+    "format_plage_horaire": "{debut} – {fin}"
+  },
+  "acces": {
+    "refuse": "Je ne peux pas répondre à cette demande depuis ce numéro. Je la transmets au secrétariat, qui vous recontactera."
+  },
+  "escalade": {
+    "transmis": "C'est transmis au secrétariat de l'école. Une personne vous répondra."
+  },
+  "langue": {
+    "nom": "Français"
+  },
+  "agent": {
+    "accueil": "Bonjour, ici l'assistant de {ecole}.",
+    "menu": "1. Prendre un rendez-vous\n2. Voir ou annuler un rendez-vous\n3. Parler au secrétariat\n4. Changer de langue\n\nRépondez par le numéro de votre choix.",
+    "retour_menu": "Répondez 0 pour revenir au menu.",
+    "choix_invalide": "Je n'ai pas compris. Répondez par l'un des numéros proposés, ou 0 pour revenir au menu.",
+    "ligne_option": "{numero}. {libelle}",
+    "choix_enfant": "Pour quel enfant ?",
+    "ligne_enfant": "{numero}. {prenom} ({classe})",
+    "choix_motif": "Quel est le motif du rendez-vous pour {prenom} ?",
+    "choix_creneau": "Voici les prochains créneaux libres avec {ressource} :",
+    "aucun_creneau": "Il n'y a pas de créneau libre avec {ressource} dans les trois prochaines semaines. Je transmets votre demande au secrétariat, qui vous recontactera.",
+    "confirmation": "Je réserve pour {prenom} :\n{date}, avec {ressource}\nMotif : {motif}\n\n1. Confirmer\n2. Choisir un autre créneau",
+    "rdv_confirme": "C'est confirmé : rendez-vous pour {prenom} le {date}, avec {ressource}. Pour annuler, écrivez « menu » puis choisissez 2.",
+    "creneau_pris": "Ce créneau n'est plus disponible. Voici d'autres créneaux :",
+    "aucun_rdv": "Vous n'avez aucun rendez-vous à venir.",
+    "liste_rdv": "Vos rendez-vous à venir. Répondez par le numéro de celui que vous voulez annuler :",
+    "ligne_rdv": "{numero}. {prenom} — {date}, avec {ressource}",
+    "confirmation_annulation": "Annuler le rendez-vous de {prenom} le {date} ?\n\n1. Oui, annuler\n2. Non, le garder",
+    "rdv_annule": "Le rendez-vous de {prenom} du {date} est annulé.",
+    "rdv_conserve": "Le rendez-vous est conservé.",
+    "choix_langue": "Choisissez votre langue :",
+    "langue_changee": "C'est noté, je vous écrirai désormais en français.",
+    "sujet_resultats": "Je ne communique ni notes, ni résultats, ni appréciations. L'enseignant peut en parler avec vous lors d'un rendez-vous : répondez 1 pour en prendre un.",
+    "sujet_comportement": "Je ne traite pas les questions de comportement ou de discipline. L'enseignant ou la direction peut en parler avec vous lors d'un rendez-vous : répondez 1 pour en prendre un.",
+    "sujet_escalade": "Je ne peux pas traiter cette question moi-même. Je la transmets au secrétariat de l'école, qui vous recontactera rapidement.",
+    "message_non_texte": "Je ne lis que les messages écrits. Répondez par un numéro, ou écrivez « menu ».",
+    "incident": "Un incident technique m'empêche de répondre pour le moment. Le secrétariat est prévenu et vous recontactera."
+  },
+  "consentement": {
+    "stop": "C'est noté : vous ne recevrez plus de rappels ni d'annonces. Vous pouvez toujours m'écrire. Pour les réactiver, écrivez START.",
+    "reprise": "C'est noté : les rappels et annonces sont réactivés."
+  },
+  "rappel": {
+    "rendez_vous": "Rappel : rendez-vous pour {prenom} le {date}, avec {ressource}. Pour annuler, écrivez « menu » puis choisissez 2."
+  },
+  "secretariat": {
+    "nouvelle_escalade": "BALLAN — demande à traiter ({motif}) : {numero}"
+  }
+}
