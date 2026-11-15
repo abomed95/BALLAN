@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body {
+    background: #0F3A33; color: #F6F1E6;
+    font-family: 'Inter', 'DejaVu Sans', 'Noto Color Emoji', sans-serif;
+    position: relative;
+  }
+  .titre { font-family: 'Inter Display', 'Inter', sans-serif; }
+  .abs { position: absolute; }
+
+  /* Fond : deux halos discrets */
+  .halo { position: absolute; border-radius: 50%; filter: blur(120px); opacity: .35; }
+
+  /* --- Accroche et fin --- */
+  .plein { position: absolute; left: 90px; width: 900px; }
+  .accroche-1 { top: 640px; font-size: 92px; font-weight: 700; line-height: 1.08; }
+  .accroche-2 { top: 1080px; font-size: 76px; font-weight: 700; line-height: 1.12; color: #E2A23B; }
+  .fin-logo { top: 600px; font-size: 200px; font-weight: 800; letter-spacing: -4px; }
+  .fin-ligne { top: 850px; font-size: 60px; font-weight: 600; line-height: 1.2; }
+  .fin-langues { top: 1040px; font-size: 44px; color: #E2A23B; font-weight: 600; }
+  .fin-societe { top: 1160px; font-size: 40px; color: #C9DAD4; }
+  .fin-note { top: 1760px; font-size: 28px; color: #9FB8B0; line-height: 1.35; }
+
+  /* --- Legendes au-dessus du telephone --- */
+  .legende { position: absolute; left: 90px; top: 110px; width: 900px; }
+  .pastille {
+    display: inline-block; font-size: 32px; font-weight: 700; letter-spacing: 1px;
+    padding: 12px 28px; border-radius: 999px; background: #E2A23B; color: #1C2A26;
+  }
+  .pastille.dispo { background: #6FD3B0; color: #0F3A33; }
+  .legende h2 { margin-top: 28px; font-size: 76px; font-weight: 700; line-height: 1.08; }
+  .legende p { margin-top: 16px; font-size: 38px; color: #C9DAD4; }
+
+  /* --- Telephone --- */
+  .telephone {
+    position: absolute; left: 110px; top: 470px; width: 860px; height: 1360px;
+    background: #EFE7D6; border: 16px solid #08241F; border-radius: 72px; overflow: hidden;
+    box-shadow: 0 40px 120px rgba(0,0,0,.45);
+  }
+  .entete {
+    position: absolute; left: 0; top: 0; width: 100%; height: 170px; background: #164A41;
+    display: flex; align-items: center; gap: 28px; padding: 40px 40px 0;
+  }
+  .avatar {
+    width: 92px; height: 92px; border-radius: 50%; background: #E2A23B; color: #0F3A33;
+    display: flex; align-items: center; justify-content: center; font-size: 46px; font-weight: 800;
+  }
+  .entete .nom { font-size: 40px; font-weight: 700; color: #F6F1E6; }
+  .entete .statut { font-size: 28px; color: #9FD8C4; margin-top: 4px; }
+
+  .fil { position: absolute; left: 0; top: 170px; width: 100%; bottom: 130px; padding: 40px 36px; display: flex; flex-direction: column; justify-content: flex-end; gap: 26px; }
+  .saisie { position: absolute; left: 24px; right: 24px; bottom: 24px; height: 88px; border-radius: 44px; background: #FFFDF8; display: flex; align-items: center; padding: 0 36px; font-size: 32px; color: #9AA39F; }
+  .creneau { position: relative; align-self: flex-start; }
+  .creneau .frappe { position: absolute; left: 0; top: 0; }
+  .jour { align-self: center; margin-bottom: auto; font-size: 26px; color: #6A6F66; background: #E3D9C3; border-radius: 14px; padding: 8px 20px; }
+
+  .bulle {
+    max-width: 680px; font-size: 36px; line-height: 1.38; padding: 22px 28px 16px;
+    border-radius: 30px; color: #1F2D29; position: relative;
+  }
+  .recu { align-self: flex-start; background: #FFFDF8; border-top-left-radius: 8px; box-shadow: 0 2px 0 rgba(0,0,0,.06); }
+  .envoye { align-self: flex-end; background: #F6D9A0; border-top-right-radius: 8px; }
+  .heure { display: block; text-align: right; font-size: 24px; color: #7B7F76; margin-top: 6px; }
+  .discret { display: block; font-size: 27px; color: #4F6B63; margin-top: 12px; }
+  .gras { font-weight: 700; }
+
+  .frappe { align-self: flex-start; background: #FFFDF8; border-radius: 30px; border-top-left-radius: 8px; padding: 26px 32px; display: flex; gap: 12px; opacity: 0; }
+  .point { width: 16px; height: 16px; border-radius: 50%; background: #9AA39F; animation: point 900ms ease-in-out infinite; }
+  .point:nth-child(2) { animation-delay: 150ms; }
+  .point:nth-child(3) { animation-delay: 300ms; }
+
+  .pied { position: absolute; left: 0; width: 100%; top: 1852px; text-align: center; font-size: 28px; color: #9FB8B0; }
+
+  /* --- Animations, pilotees image par image --- */
+  @keyframes scene { 0% { opacity: 0; } 6% { opacity: 1; } 94% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes scenePhone { 0% { opacity: 0; transform: translateY(160px); } 3% { opacity: 1; transform: none; } 97% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-60px); } }
+  @keyframes monte { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: none; } }
+  @keyframes bulle { from { opacity: 0; transform: translateY(36px) scale(.96); } to { opacity: 1; transform: none; } }
+  @keyframes frappe { 0% { opacity: 1; } 99% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes point { 0%, 100% { transform: translateY(0); opacity: .5; } 50% { transform: translateY(-10px); opacity: 1; } }
+  @keyframes halo { 0% { transform: translate(0,0); } 50% { transform: translate(80px, -60px); } 100% { transform: translate(0,0); } }
+
+  .s { opacity: 0; animation-name: scene; animation-fill-mode: both; animation-timing-function: linear; }
+  .m { animation: monte 600ms cubic-bezier(.2,.8,.2,1) both; }
+  .b { animation: bulle 420ms cubic-bezier(.2,.8,.2,1) both; }
+  .f { animation: frappe 800ms linear forwards; }
+</style>
+</head>
+<body>
+
+<div class="halo" style="left:-200px;top:-150px;width:800px;height:800px;background:#1F6F5F;animation:halo 20s ease-in-out infinite;"></div>
+<div class="halo" style="left:500px;top:1300px;width:800px;height:800px;background:#E2A23B;opacity:.18;animation:halo 24s ease-in-out infinite reverse;"></div>
+
+<!-- 0-5 s : accroche -->
+<div class="s" style="animation-duration:5s;animation-delay:0s;">
+  <p class="plein titre accroche-1 m" style="animation-delay:300ms;">Halima a trois enfants, dans trois classes.</p>
+  <p class="plein titre accroche-2 m" style="animation-delay:2000ms;">Tout lui arrive sur WhatsApp.</p>
+</div>
+
+<!-- 5-34 s : le telephone -->
+<div class="telephone" style="opacity:0;animation:scenePhone 29s linear both;animation-delay:5s;">
+  <div class="entete">
+    <div class="avatar">S</div>
+    <div><p class="nom">École Sahan San</p><p class="statut">Assistant BALLAN · en ligne</p></div>
+  </div>
+
+  <div class="saisie">Écrire un message</div>
+
+  <!-- Devoirs : 5-12 s -->
+  <div class="fil s" style="animation-duration:7s;animation-delay:5s;">
+    <span class="jour">Aujourd’hui</span>
+    <div class="creneau"><div class="bulle recu b" style="animation-delay:6.5s;">Bonsoir Halima. <span class="gras">Devoirs de Sagal</span> (CE1 A) pour demain :<br>📖 Lecture, page 24<br>✏️ Exercices 3 et 4, page 51<span class="heure">18:02</span></div><div class="frappe f" style="animation-delay:5.7s;"><span class="point"></span><span class="point"></span><span class="point"></span></div></div>
+    <div class="bulle envoye b" style="animation-delay:8.8s;">Merci beaucoup !<span class="heure">18:05</span></div>
+  </div>
+
+  <!-- Notes : 12-19 s -->
+  <div class="fil s" style="animation-duration:7s;animation-delay:12s;">
+    <span class="jour">Jeudi</span>
+    <div class="creneau"><div class="bulle recu b" style="animation-delay:13.4s;"><span class="gras">Nasra</span> (CM2 A) a obtenu <span class="gras">16/20</span> au contrôle de mathématiques du 12 novembre.<span class="discret">🔒 Visible uniquement par les parents de Nasra</span><span class="heure">16:40</span></div><div class="frappe f" style="animation-delay:12.6s;"><span class="point"></span><span class="point"></span><span class="point"></span></div></div>
+    <div class="bulle envoye b" style="animation-delay:15.9s;">Bravo Nasra ! 👏<span class="heure">16:42</span></div>
+  </div>
+
+  <!-- Frais : 19-26 s -->
+  <div class="fil s" style="animation-duration:7s;animation-delay:19s;">
+    <span class="jour">1er décembre</span>
+    <div class="creneau"><div class="bulle recu b" style="animation-delay:20.4s;">Rappel : les <span class="gras">frais de scolarité de décembre</span> sont à régler avant le <span class="gras">10 décembre</span>, au secrétariat.<span class="heure">08:00</span></div><div class="frappe f" style="animation-delay:19.6s;"><span class="point"></span><span class="point"></span><span class="point"></span></div></div>
+    <div class="bulle envoye b" style="animation-delay:22.9s;">C’est noté, merci.<span class="heure">08:14</span></div>
+  </div>
+
+  <!-- Rendez-vous : 26-34 s -->
+  <div class="fil s" style="animation-duration:8s;animation-delay:26s;">
+    <span class="jour">Aujourd’hui</span>
+    <div class="bulle recu b" style="animation-delay:26.5s;">Voici les prochains créneaux libres avec <span class="gras">M. Farah</span> :<br>1. dimanche 22 novembre à 07:30<br>2. mercredi 25 novembre à 12:00<br>3. dimanche 29 novembre à 07:30<span class="heure">17:31</span></div>
+    <div class="bulle envoye b" style="animation-delay:28.4s;">1<span class="heure">17:31</span></div>
+    <div class="creneau"><div class="bulle recu b" style="animation-delay:29.8s;">C’est confirmé ✅ Rendez-vous pour <span class="gras">Ahmed</span> le dimanche 22 novembre à 07:30, avec M. Farah.<span class="discret">Rappel automatique la veille.</span><span class="heure">17:32</span></div><div class="frappe f" style="animation-delay:29.0s;"><span class="point"></span><span class="point"></span><span class="point"></span></div></div>
+  </div>
+</div>
+
+<!-- Legendes -->
+<div class="legende s" style="animation-duration:7s;animation-delay:5s;">
+  <span class="pastille">Bientôt dans BALLAN</span>
+  <h2 class="titre">Les devoirs du soir</h2>
+  <p>Chaque enfant, chaque classe, au même endroit.</p>
+</div>
+<div class="legende s" style="animation-duration:7s;animation-delay:12s;">
+  <span class="pastille">Bientôt dans BALLAN</span>
+  <h2 class="titre">Les notes, dès leur saisie</h2>
+  <p>Seuls les parents de l’enfant les reçoivent.</p>
+</div>
+<div class="legende s" style="animation-duration:7s;animation-delay:19s;">
+  <span class="pastille">Bientôt dans BALLAN</span>
+  <h2 class="titre">Les frais mensuels, sans oubli</h2>
+  <p>Un rappel clair avant chaque échéance.</p>
+</div>
+<div class="legende s" style="animation-duration:8s;animation-delay:26s;">
+  <span class="pastille dispo">Disponible dès aujourd’hui</span>
+  <h2 class="titre">Un rendez-vous en quatre réponses</h2>
+  <p>Avec l’enseignant, sans un seul appel.</p>
+</div>
+
+<!-- 34-40 s : fin -->
+<div class="s" style="animation-duration:6.4s;animation-delay:34s;animation-name:monte;animation-duration:700ms;">
+  <p class="plein titre fin-logo">BALLAN</p>
+  <p class="plein titre fin-ligne">L’école, dans la poche des parents.</p>
+  <p class="plein fin-langues">Français · العربية · Soomaali</p>
+  <p class="plein fin-societe">Une solution AMD Digital · Djibouti</p>
+  <p class="plein fin-note">Données fictives. Devoirs, notes et frais mensuels : fonctions à venir.<br>Rendez-vous et rappels : disponibles.</p>
+</div>
+
+<p class="pied s" style="animation-duration:29s;animation-delay:5s;">BALLAN · AMD Digital</p>
+
+<script>
+  // Pilotage image par image : toutes les animations figees a l'instant demande.
+  window.rendre = (ms) => {
+    for (const a of document.getAnimations()) { a.pause(); a.currentTime = ms; }
+  };
+  window.rendre(0);
+</script>
+</body>
+</html>
