@@ -1,0 +1,6 @@
+famille;identifiant;prenom;nom;classe;annee_naissance;parent1_lien;parent1_telephone;parent1_langue;parent2_lien;parent2_telephone;parent2_langue;consentement
+Ali;2026-001;Ahmed;Ali;CP A;2020;mere;77 10 10 10;so;pere;77 10 10 11;fr;oui
+Ali;2026-002;Sagal;Ali;CE1 A;2019;mere;77 10 10 10;so;pere;77 10 10 11;fr;oui
+Ali;2026-003;Nasra;Ali;CM2 A;2016;mere;77 10 10 10;so;pere;77 10 10 11;fr;oui
+Osman;2026-004;Mouna;Osman;CE1 A;2019;pere;+253 77 20 20 20;fr;mere;0025377202021;ar;oui
+Robleh;2026-005;Idris;Robleh;CM2 A;2016;tuteur;77 30 30 30;fr;;;;non
